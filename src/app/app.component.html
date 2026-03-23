@@ -1,0 +1,312 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+   <a class="navbar-brand font-weight-bold" style="color:#f8f9fa;">Student Manager</a>
+   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+      aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+   </button>
+   <div class="collapse navbar-collapse" id="navbarColor02">
+      <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+            <a class="nav-link" (click)="onOpenModal(null,'add')" (click)="onCancel(addForm)">Add Student <span
+                  class="sr-only">(current)</span></a>
+         </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+         <input type="search" (ngModelChange)="searchEmployees(key.value)" #key="ngModel" ngModel name="key"
+            id="searchName" class="form-control form-control-sm mr-sm-2" style="width: 200px;"
+            placeholder="Search employees..." required>
+      </form>
+   </div>
+</nav>
+<div class="container" id="main-container">
+   <div class="row">
+      <div *ngFor="let employee of employees" class="col-md-6 col-xl-4 mb-4">
+         <!-- BREITE!!!!!!!!!!!!!!! <div *ngFor="let employee of employees" class="col-md-6 col-xl-3"> -->
+         <div class="card m-b-30 shadow-sm rounded-3">
+            <div class="card-body row">
+               <div class="col-6">
+                  <!-- Profile Picture -->
+                  <a href="">
+                     <img [src]="employee?.image || 'assets/default-avatar.png'" alt="{{employee?.name}}"
+                        class="img-fluid rounded-circle border border-light shadow-sm"
+                        style="width: 100px; height: 100px; object-fit: cover; object-position: center;"
+                        onerror="this.src='https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/f4a4d442419075.57cc3f77e4089.png ';">
+                  </a>
+               </div>
+               <div class="col-6 align-self-center text-center text-md-left">
+                  <!-- Name and Role -->
+                  <h5 class="mt-3">{{employee?.name}}</h5>
+                  <p class="text-muted">{{employee?.alias}}</p>
+                  <span class="badge badge-pill badge-info">
+                     {{employee?.klassnsprecher ? 'Klassensprecher' : 'Schüler'}}
+                  </span>
+               </div>
+            </div>
+            <ul class="list-group list-group-flush">
+               <li class="list-group-item"><i class="fa fa-envelope float-right"></i><strong>{{employee?.email ?
+                     employee.email : '-'}}</strong></li>
+               <li class="list-group-item"><i class="fa fa-phone float-right"></i>Tel: <strong>{{employee?.tel ?
+                     employee.tel : '-'}}</strong></li>
+               <!--<li class="list-group-item d-flex justify-content-between align-items-center">
+  <div>
+    <i class="fa fa-map-marker-alt text-primary mr-2"></i>
+    <span class="font-weight-bold">Wohnort:</span><br>
+    <small class="text-muted ml-3">{{employee?.strasse_Nummer}}, {{employee?.plz_ort}}</small>
+  </div>
+  <i class="fa fa-home fa-lg text-secondary"></i>
+</li>  -->
+
+               <li class="list-group-item"><i class="fa fa-envelope float-right"></i> Wohnort :<br> <span
+                     class="font-weight-bold">{{employee?.strasse_Nummer ? employee.strasse_Nummer + ', ' +
+                     (employee.plz_ort ? employee.plz_ort : '-') : '-'}}</span></li>
+               <li class="list-group-item d-flex justify-content-between align-items-center"><span>Lieblingsfach:
+                     <strong>{{employee?.lieblingsfach ? employee.lieblingsfach : 'SWP'}}</strong></span></li>
+               <li class="list-group-item"><i class="fa fa-utensils float-right"></i>Lieblingsessen : {{employee?.essen
+                  ? employee.essen : '-'}}</li>
+               <li class="list-group-item"><i class="fa fa-hobby float-right"></i>Hobby : {{employee?.hobby ?
+                  employee.hobby : '-'}}</li>
+
+               <!--<li class="list-group-item d-flex justify-content-between align-items-center">
+  <div>
+    <i class="fa fa-map-marker-alt text-primary mr-2"></i>
+    <span class="font-weight-bold">Wohnort:</span><br>
+    <small class="text-muted ml-3">{{employee?.strasse_Nummer}}, {{employee?.plz_ort}}</small>
+  </div>
+  <i class="fa fa-home fa-lg text-secondary"></i>
+</li>
+<li class="list-group-item"><i class="fa fa-envelope float-right"></i>Wohnort : {{employee?.strasse_Nummer}},{{employee?.plz_ort}}</li>
+-->
+
+            </ul>
+            <div class="card-body">
+               <div class="float-right btn-group btn-group-sm">
+                  <a (click)="onOpenModal(employee, 'edit')" class="btn btn-primary tooltips" data-placement="top"
+                     data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                  <a (click)="onOpenModal(employee, 'delete')" class="btn btn-secondary tooltips" data-placement="top"
+                     data-original-title="Delete"><i class="fa fa-times"></i></a>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Add Employee Modal -->
+   <div class="modal fade" id="addEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="addEmployeeModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="addEmployeeModalLabel">Add Student</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #addForm="ngForm" (ngSubmit)="onAddEmloyee(addForm)">
+                  <div class="form-group">
+                     <label for="name">Name</label>
+                     <input type="text" ngModel="{{editEmployee?.name}}" name="name" class="form-control" id="name"
+                        aria-describedby="emailHelp" placeholder="Name">
+                  </div>
+                  <div class="form-group">
+                     <label for="email">Email Address</label>
+                     <input type="email" ngModel="{{editEmployee?.email}}" name="email" class="form-control" id="email"
+                        placeholder="Email">
+                  </div>
+                  <div class="form-group">
+                     <label for="alias">Alias</label>
+                     <input type="text" ngModel="{{editEmployee?.alias}}" name="alias" class="form-control" id="alias"
+                        placeholder="Job title">
+                  </div>
+                  <div class="form-group">
+                     <label for="phone">Phone</label>
+                     <input type="text" ngModel="{{editEmployee?.tel}}" name="phone" class="form-control" id="tel"
+                        name="phone" placeholder="Phone">
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-6">
+                        <label for="strasse_Nummer">Straße und Hausnummer</label>
+                        <input type="text" ngModel="{{editEmployee?.strasse_Nummer}}" name="strasse_Nummer"
+                           class="form-control" id="strasse_Nummer" placeholder="Straße und Hausnummer">
+                     </div>
+                     <div class="form-group col-md-6">
+                        <label for="plz_ort">PLZ</label>
+                        <input type="text" ngModel="{{editEmployee?.plz_ort}}" name="plz_ort" class="form-control"
+                           id="plz_ort" placeholder="PLZ">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <input list="faecher" ngModel="lieblingsfach" name="lieblingsfach" class="form-control" required />
+
+                     <datalist id="faecher">
+                        <option *ngFor="let fach of lieblingsfaecher" [value]="fach">{{ fach }}</option>
+                     </datalist>
+                  </div>
+                  <div class="form-group">
+                     <label for="hobby">Lieblingsessen</label>
+                     <input type="text" ngModel="{{editEmployee?.essen}}" name="essen" class="form-control" id="essen"
+                        placeholder="Lieblingsessen">
+                  </div>
+                  <div class="form-group">
+                     <label for="hobby">Hobby</label>
+                     <input type="text" ngModel="{{editEmployee?.hobby}}" name="hobby" class="form-control" id="hobby"
+                        placeholder="Hobby">
+                  </div>
+                  <div class="form-group">
+                     <label for="image">Image URL</label>
+                     <input type="text" ngModel="{{editEmployee?.image}}" name="image" class="form-control" id="image"
+                        placeholder="Image URL">
+                  </div>
+<div class="form-group form-check">
+                  <input type="checkbox" ngModel name="klassensprecherin" class="form-check-input" id="klassensprecherin">
+                  <label class="form-check-label" for="klassensprecherin">Klassensprecher/in?</label>
+               </div>
+
+                  <div class="modal-footer">
+                     <button type="button" id="add-employee-form" class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                     <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save changes</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Edit Modal -->
+   <div class="modal fade" id="updateEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="employeeEditModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="updateEmployeeModalLabel">Edit Employee {{editEmployee?.name}}</h5>
+               <button type="button" class="close" data-dismiss="modal" (click)="onCancel(addForm)" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <div class="form-group">
+                     <label for="name">Name</label>
+                     <input type="text" ngModel="{{editEmployee?.name}}" name="name" class="form-control" id="name"
+                        aria-describedby="emailHelp" placeholder="Name">
+                  </div>
+                  <input type="hidden" ngModel="{{editEmployee?.id}}" name="id" class="form-control" id="id"
+                     placeholder="id">
+                  <input type="hidden" ngModel="{{editEmployee?.studentCode}}" name="userCode" class="form-control"
+                     id="userCode" placeholder="studentCode">
+                  <div class="form-group">
+                     <label for="email">Email Address</label>
+                     <input type="email" ngModel="{{editEmployee?.email}}" name="email" class="form-control" id="email"
+                        placeholder="Email">
+                  </div>
+                  <div class="form-group">
+                     <label for="alias">Alias</label>
+                     <input type="text" ngModel="{{editEmployee?.alias}}" name="alias" class="form-control" id="alias"
+                        placeholder="Job title">
+                  </div>
+                  <div class="form-group">
+                     <label for="phone">Phone</label>
+                     <input type="text" ngModel="{{editEmployee?.tel}}" name="tel" class="form-control" id="tel"
+                        name="tel" placeholder="Phone">
+                  </div>
+                  <div class="form-row">
+                     <div class="form-group col-md-6">
+                        <label for="strasse_Nummer">Straße und Hausnummer</label>
+                        <input type="text" ngModel="{{editEmployee?.strasse_Nummer}}" name="strasse_Nummer"
+                           class="form-control" id="strasse_Nummer" placeholder="Straße und Hausnummer">
+                     </div>
+                     <div class="form-group col-md-6">
+                        <label for="plz_ort">PLZ</label>
+                        <input type="text" ngModel="{{editEmployee?.plz_ort}}" name="plz_ort" class="form-control"
+                           id="plz_ort" placeholder="PLZ">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <input list="faecher" ngModel="{{editEmployee?.lieblingsfach}}" name="lieblingsfach"
+                        class="form-control" required />
+
+                     <datalist id="faecher">
+                        <option *ngFor="let fach of lieblingsfaecher" [value]="fach">{{ fach }}</option>
+                     </datalist>
+                  </div>
+                  <div class="form-group">
+                     <label for="hobby">Lieblingsessen</label>
+                     <input type="text" ngModel="{{editEmployee?.essen}}" name="essen" class="form-control" id="essen"
+                        placeholder="essen">
+                  </div>
+                  <div class="form-group">
+                     <label for="hobby">Hobby</label>
+                     <input type="text" ngModel="{{editEmployee?.hobby}}" name="hobby" class="form-control" id="hobby"
+                        placeholder="Hobby">
+                  </div>
+
+
+                  <div class="form-group">
+                     <label for="image">Image URL</label>
+                     <input type="text" ngModel="{{editEmployee?.image}}" name="image" class="form-control" id="image"
+                        placeholder="Image URL">
+                  </div>
+                  <div *ngIf="editEmployee" class="form-group">
+                     <label for="Klassnsprecher"> ㅤ
+                     </label>
+                     <input type="checkbox" ngModel="{{editEmployee.klassnsprecher}}" name="klassnsprecher"
+                        class="form-check-input" id="Klassnsprecher">
+                     <label for="Klassnsprecher">Ist der Schüler {{ getFirstName() }} Klassensprecher?</label>
+
+                  </div>
+
+                  <div class="modal-footer">
+                     <button type="button" data-dismiss="modal" class="btn btn-secondary"
+                        (click)="onCancel(addForm)">Close</button>
+                     <!--<button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>   -->
+                     <button (click)="onUpdateEmloyee(editForm.value)" data-dismiss="modal" class="btn btn-primary">Save
+                        changes</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Delete Modal -->
+   <div class="modal fade" id="deleteEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h5 class="modal-title" id="deleteModelLabel">Delete Employee</h5>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Bist du dir sicher das du den {{deleteEmployee?.klassnsprecher ? 'Klassensprecher' : 'Schüler'}}
+                  {{deleteEmployee?.name}} aus der Klasse entfernen willst!?! </p>
+               <p>*{{deleteEmployee?.alias}} weint* </p>
+
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button (click)="onDeleteEmloyee(deleteEmployee!.id)" [disabled]="!deleteEmployee?.id"
+                     class="btn btn-danger" data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!-- Notification for no employees -->
+<div *ngIf="employees?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
+   <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">WO SIND DIE <div class="wobble-text">SCHÜLER?!</div>
+      </h4>
+      <p>Huh...es wurden keine Schüler gefunden.</p>
+      <p style="font-size: 48px; margin: 20px 0;">
+         <img src="https://gifdb.com/images/high/explode-cat-just-vanished-4umknvyuaraj4ise.gif" alt="Exploding Cat"
+            style="width: 100%; max-width: 200px;">
+      </p>
+
+   </div>
+</div>

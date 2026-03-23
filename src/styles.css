@@ -1,0 +1,104 @@
+/* Import Fonts and Bootstrap */
+@import 'https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css ';
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css ';
+
+/* General Styles */
+body {
+  background: #eef1f5;
+  font-family: 'Roboto', sans-serif; /* Changed font to Roboto */
+  color: #333;
+}
+
+a {
+  cursor: pointer;
+}
+
+.navbar {
+  margin-bottom: 30px;
+  border-bottom: 2px solid #444;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: 1px;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  transition: transform 0.2s ease-in-out; /* Added transition for hover effect */
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-body {
+  padding: 15px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.card-subtitle {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.card-text {
+  font-size: 0.9rem;
+}
+
+/* Profile Picture Styling */
+.img-fluid.rounded-circle.border.border-light.shadow-sm {
+  border: 3px solid #fff; /* Default border for all students */
+}
+
+/* Special Border for Klassensprecher */
+.klassensprecher .img-fluid.rounded-circle.border.border-light.shadow-sm {
+  border: 3px solid #007bff; /* Blue border for Klassensprecher */
+}
+
+/* Social Links */
+.social-links li a {
+  border-radius: 50%;
+  background-color: rgba(89, 206, 181, 0.85);
+  color: #fff;
+  display: inline-block;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  width: 30px;
+  font-size: 12px;
+}
+
+a {
+  color: #707070;
+}
+
+i {
+  color: white;
+}
+ /* Keyframes für die Wackel-Animation */
+    @keyframes wobble {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px) rotate(-2deg); }
+      50% { transform: translateX(5px) rotate(2deg); }
+      75% { transform: translateX(-5px) rotate(-2deg); }
+      100% { transform: translateX(0); }
+    }
+
+    /* Stil für den wackelnden Text */
+    .wobble-text {
+      font-size: 48px;
+      color: red;
+      font-weight: bold;
+      animation: wobble 0.5s infinite;
+    }
+    
